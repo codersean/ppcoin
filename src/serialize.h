@@ -826,6 +826,7 @@ public:
             vch.insert(it, first, last);
     }
 
+#if !defined(OS_FREEBSD)
     void insert(iterator it, std::vector<char>::const_iterator first, std::vector<char>::const_iterator last)
     {
         if (it == vch.begin() + nReadPos && last - first <= nReadPos)
@@ -837,6 +838,7 @@ public:
         else
             vch.insert(it, first, last);
     }
+#endif
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1300
     void insert(iterator it, const char* first, const char* last)

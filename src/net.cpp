@@ -51,7 +51,11 @@ CAddress addrLocalHost(CService("0.0.0.0", 0), nLocalServices);
 CAddress addrSeenByPeer(CService("0.0.0.0", 0), nLocalServices);
 static CNode* pnodeLocalHost = NULL;
 uint64 nLocalHostNonce = 0;
+#if defined(OS_FREEBSD)
+boost::array<int, THREAD_MAX> vnThreadsRunning;
+#else
 array<int, THREAD_MAX> vnThreadsRunning;
+#endif
 static SOCKET hListenSocket = INVALID_SOCKET;
 CAddrMan addrman;
 

@@ -68,6 +68,12 @@ contains(FIRST_CLASS_MESSAGING, 1) {
     DEFINES += FIRST_CLASS_MESSAGING
 }
 
+# so can differentiate between Linux and FreeBSD, etc
+unix {
+    UNAME = $$system(uname)
+    contains(UNAME, FreeBSD):DEFINES += OS_FREEBSD
+}
+
 contains(BITCOIN_NEED_QT_PLUGINS, 1) {
     DEFINES += BITCOIN_NEED_QT_PLUGINS
     QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs qtaccessiblewidgets
@@ -262,6 +268,8 @@ TRANSLATIONS = $$files(src/qt/locale/bitcoin_*.ts)
 isEmpty(QMAKE_LRELEASE) {
     win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
     else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+    
+    contains(UNAME, FreeBSD):QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease-qt4
 }
 isEmpty(TS_DIR):TS_DIR = src/qt/locale
 # automatically build translations, so they can be included in resource file
@@ -289,6 +297,7 @@ isEmpty(BOOST_THREAD_LIB_SUFFIX) {
 
 isEmpty(BDB_LIB_PATH) {
     macx:BDB_LIB_PATH = /opt/local/lib/db48
+    contains(UNAME, FreeBSD):BDB_LIB_PATH = /usr/local/lib/db48
 }
 
 isEmpty(BDB_LIB_SUFFIX) {
@@ -297,6 +306,7 @@ isEmpty(BDB_LIB_SUFFIX) {
 
 isEmpty(BDB_INCLUDE_PATH) {
     macx:BDB_INCLUDE_PATH = /opt/local/include/db48
+    contains(UNAME, FreeBSD):BDB_INCLUDE_PATH = /usr/local/include/db48
 }
 
 isEmpty(BOOST_LIB_PATH) {
@@ -341,6 +351,11 @@ LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
 # -lgdi32 has to happen after -lcrypto (see  #681)
 windows:LIBS += -lole32 -luuid -lgdi32
 LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
+
+contains(UNAME, FreeBSD) {
+    LIBS += -lexecinfo
+}
+
 
 contains(RELEASE, 1) {
     !windows:!macx {
