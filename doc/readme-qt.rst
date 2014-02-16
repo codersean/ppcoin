@@ -67,6 +67,28 @@ Mac OS X
 .. _`MacPorts`: http://www.macports.org/install.php
 
 
+FreeBSD
+-------
+
+First, make sure that the required packages for Qt4 development of your
+distribution are installed, for FreeBSD and PCBSD these are:
+
+::
+
+    sudo pkg install qmake4 qtcreator db48 upnp miniupnpc
+
+then execute the following:
+
+::
+
+    qmake-qt4
+    make
+
+Alternatively, install Qt Creator and open the `bitcoin-qt.pro` file.
+
+An executable named `bitcoin-qt` will be built.
+
+
 Build configuration options
 ============================
 
